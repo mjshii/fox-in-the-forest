@@ -9,34 +9,29 @@ enum class Suit {
 
 data class Card(val value: Int, val suit: Suit) : Comparable<Card> {
     override fun compareTo(other: Card) : Int {
-        return (value + 20 * suit.ordinal) - (other.value + 20 * other.suit.ordinal)
+        return (value - other.value) + 20 * (suit.ordinal - other.suit.ordinal)
     }
 }
 
 class Deck {
     private var cards = LinkedList<Card>()
     init {
-        for (value in 1..11) {
-            Suit.values().forEach { cards.add(Card(value, it)) }
+        (1..11).forEach {
+                value -> Suit.values().forEach { cards.add(Card(value, it)) }
         }
         cards.shuffle()
     }
 
-    fun deal() : Card {
-        return cards.pollFirst()!!
-    }
+    fun deal() : Card = cards.pollFirst()!!
 }
 
 data class Hand(val deck: Deck) {
-    val cards = ArrayList<Card>()
+    private val cards = ArrayList<Card>()
     init {
         repeat(13) { cards.add(deck.deal()) }
         cards.sort()
     }
 
-    fun getDeepCopy() : ArrayList<Card> {
-        val cloned = ArrayList<Card>()
-        cards.forEach{ cloned.add(Card(it.value, it.suit)) }
-        return cloned
-    }
+    fun getHand() : ArrayList<Card> = cards.toMutableList() as ArrayList<Card>
+    fun contains(card: Card) : Boolean = cards.contains(card)
 }

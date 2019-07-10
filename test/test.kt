@@ -1,6 +1,7 @@
 import game.*
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.test.assertFalse
 
 class Test {
 
@@ -10,11 +11,14 @@ class Test {
     }
 
     @Test
-    fun testSortHand() {
-        val deck = Deck()
-        val hand = Hand(deck)
-        for (i in 0..11) {
-            assertTrue(hand.cards[i] < hand.cards[i + 1])
-        }
+    fun testCheatingAttempts() {
+        val deck = Deck() ; val hand = Hand(deck)
+        val receivedHand = hand.getHand()
+        val cheat = Card(0, Suit.Bell)
+
+        receivedHand.add(cheat)
+        receivedHand[0] = cheat
+
+        assertFalse(hand.getHand().contains(cheat))
     }
 }
